@@ -6,6 +6,7 @@ Group:      Qt/Qt
 License:    LGPLv2.1 with exception or GPLv3
 URL:        http://qt-project.org/
 Source0:    %{name}-%{version}.tar.xz
+Patch1:     remove-qt3d.patch
 BuildRequires:  qt5-qtcore
 BuildRequires:  qt5-qtcore-devel
 BuildRequires:  qt5-qtgui
@@ -132,6 +133,8 @@ This package contains the Location import for QtDeclarative
 
 %prep
 %setup -q -n %{name}-%{version}/upstream
+
+%patch1 -p1 -b .removeqt3d
 
 %build
 export QTDIR=/usr/share/qt5
