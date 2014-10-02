@@ -1,10 +1,10 @@
-Name:       qt5-qtlocation-source
+Name:       qtlocation
 Summary:    Cross-platform application and UI framework
-Version:    5.0.0
-Release:    1%{?dist}
+Version:    5.3.2
+Release:    1
 Group:      Qt/Qt
 License:    LGPLv2.1 with exception or GPLv3
-URL:        http://qt-project.org/
+URL:        http://qt.io
 Source0:    %{name}-%{version}.tar.xz
 Patch1:     remove-qt3d.patch
 BuildRequires:  qt5-qtcore
@@ -71,8 +71,6 @@ Requires:   qt5-qtdeclarative
 This package contains the Positioning import for QtDeclarative
 
 
-
-
 %package -n qt5-qtlocation
 Summary:    The QtLocation library
 Group:      Qt/Qt
@@ -123,18 +121,15 @@ Group:      Qt/Qt
 Requires:   qt5-qtlocation = %{version}-%{release}
 Requires:   qt5-qtdeclarative
 
-
 %description -n qt5-qtdeclarative-import-location
 This package contains the Location import for QtDeclarative
 
 
-
-
-
 %prep
-%setup -q -n %{name}-%{version}/upstream
+%setup -q -n %{name}-%{version}
 
 %patch1 -p1 -b .removeqt3d
+
 
 %build
 export QTDIR=/usr/share/qt5
@@ -153,13 +148,12 @@ rm -rf %{buildroot}/%{_includedir}/qt5/Qt
 
 # Fix wrong path in pkgconfig files
 find %{buildroot}%{_libdir}/pkgconfig -type f -name '*.pc' \
--exec perl -pi -e "s, -L%{_builddir}/?\S+,,g" {} \;
+    -exec perl -pi -e "s, -L%{_builddir}/?\S+,,g" {} \;
 # Fix wrong path in prl files
 find %{buildroot}%{_libdir} -type f -name '*.prl' \
--exec sed -i -e "/^QMAKE_PRL_BUILD_DIR/d;s/\(QMAKE_PRL_LIBS =\).*/\1/" {} \;
+    -exec sed -i -e "/^QMAKE_PRL_BUILD_DIR/d;s/\(QMAKE_PRL_LIBS =\).*/\1/" {} \;
 
 %fdupes %{buildroot}/%{_includedir}
-
 
 
 %post -n qt5-qtpositioning -p /sbin/ldconfig
@@ -167,7 +161,6 @@ find %{buildroot}%{_libdir} -type f -name '*.prl' \
 
 %post -n qt5-qtlocation -p /sbin/ldconfig
 %postun -n qt5-qtlocation -p /sbin/ldconfig
-
 
 
 %files -n qt5-qtpositioning
@@ -192,8 +185,6 @@ find %{buildroot}%{_libdir} -type f -name '*.prl' \
 %files -n qt5-qtdeclarative-import-positioning
 %defattr(-,root,root,-)
 %{_libdir}/qt5/qml/QtPositioning/
-
-
 
 %files -n qt5-qtlocation
 %defattr(-,root,root,-)
@@ -221,5 +212,3 @@ find %{buildroot}%{_libdir} -type f -name '*.prl' \
 %files -n qt5-qtdeclarative-import-location
 %defattr(-,root,root,-)
 %{_libdir}/qt5/qml/QtLocation/
-
-
